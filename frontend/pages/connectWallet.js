@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Linking from "../components/Linking.js"
 import Image from "next/image";
 
 //INTERNAL IMPORT
@@ -27,8 +28,12 @@ const connectWallet = () => {
                 activeBtn == i + 1 ? Style.active : ""
               }`}
               key={i + 1}
-              onClick={() => setActiveBtn(i + 1)}
+              onClick={() => {
+                setActiveBtn(i + 1);
+                Linking();
+              }}
             >
+              <p></p>
               <Image
                 src={el.provider}
                 alt={el.provider}
