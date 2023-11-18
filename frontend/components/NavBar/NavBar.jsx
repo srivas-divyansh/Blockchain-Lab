@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,11 +14,29 @@ import images from "../../img";
 const NavBar = () => {
     const router = useRouter(); 
     //useState components
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [discover, setDiscover] = useState(false);
     const [help, setHelp] = useState(false);
     const [profile, setProfile] = useState(false);
     const [openSideMenu, setOpenSideMenu] = useState(false);
 
+    const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDiscover(false);
+        setHelp(false);
+        setProfile(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
     function handleCreateButtonClick() {
         // Navigate to the CreateNFT page when the button is clicked
         router.push('/createNFT'); // Replace '/createNFT' with the actual path to your CreateNFT page.
@@ -69,8 +87,8 @@ const NavBar = () => {
                     <div className={Style.logo}>
                         <Image src={images.logo}
                          alt="NFTify"
-                         width={100}
-                         height={100}
+                         width={120}
+                         height={120}
                           />
                     </div>
                 <div className={Style.navbar_container_left_box_input}>
@@ -82,7 +100,7 @@ const NavBar = () => {
                 </div>
                 {/* //end of left section */}
                 <div className={Style.navbar_container_right}>
-                    <div className={Style.navbar_container_right_discover}>
+                    <div className={Style.navbar_container_right_discover}ref={dropdownRef}>
                         {/*discover menu*/}
                         <p onClick={(e) => openMenu(e)}>Discover</p>
                         {discover && (

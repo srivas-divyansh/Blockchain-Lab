@@ -13,7 +13,7 @@ const Profile = () => {
     return (
         <div className={Style.profile}>
             <div className={Style.profile_account}>
-                <Image src={images.user} alt="user image" width={50} height={50} 
+                <Image src={images.user3} alt="user image" width={50} height={50} 
                 classNamr={Style.profile_account_info}
                 />
 
