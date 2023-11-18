@@ -2,7 +2,7 @@ import ethers from "ethers";
 import React, { useState, useEffect } from "react";
 import abi from "./contracts/MyNFT.json";
 
-function Linking() {
+export function Linking() {
   const [state, setState] = useState({
     provider: null,
     signer: null,
@@ -44,5 +44,3 @@ function Linking() {
   }, []);
   console.log(state);
 }
-
-export default Linking;
