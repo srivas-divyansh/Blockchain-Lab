@@ -1,8 +1,8 @@
 import ethers from "ethers";
-import React, { useState, useEffect } from "react";
-import abi from "./contracts/MyNFT.json";
+import {useState, useEffect} from "react";
+import abi from  "../components/contracts/MyNFT.json";
 
-export function Linking() {
+const linking = () => {
   const [state, setState] = useState({
     provider: null,
     signer: null,
@@ -10,7 +10,7 @@ export function Linking() {
   });
   const [account, setAccount] = useState("None");
   useEffect(() => {
-    const connectWallet = async () => {
+    const connectwallet = async () => {
      const contractAddress = "0x5BD3D0c828a05451B0C2306737324bD394BA5174";
      const contractABI = abi.abi;
      try {
@@ -19,14 +19,6 @@ export function Linking() {
          const account = await ethereum.request({
            method:"eth_requestAccounts",
          });
-  
-         window.ethereum.on("chainChanged", () => {
-           window.location.reload();
-         });
-  
-         window.ethereum.on("accountChanged", () => {
-           window.location.reload();
-         })
        
        const provider = new ethers.providers.Web3Provider(window.ethereum);
        const signer = provider.getSigner();
@@ -40,7 +32,9 @@ export function Linking() {
        console.log(error);
      }
      }
-   connectWallet();
+   connectwallet();
   }, []);
   console.log(state);
 }
+
+export default linking;

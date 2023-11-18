@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {Linking} from "../components/Linking.js"
+// import ethers from "ethers";
+// import abi from "../components/contracts/MyNFT.json";
+import {linking} from "./linking.js"
 import Image from "next/image";
 
 //INTERNAL IMPORT
@@ -13,9 +15,8 @@ const connectWallet = () => {
       name: "Metamask",
     },
   ]; 
-  const link = () => {
-    <Linking />
-  }
+ 
+  
   return (
     <div className={Style.connectWallet}>
       <div className={Style.connectWallet_box}>
@@ -33,7 +34,7 @@ const connectWallet = () => {
               key={i + 1}
               onClick={() => {
                 setActiveBtn(i + 1);
-                link();
+                linking();
               }}
             >
               <p></p>
