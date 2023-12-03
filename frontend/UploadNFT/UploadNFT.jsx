@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { storage } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
 import { FaPercent } from "react-icons/fa";
 import { AiTwotonePropertySafety } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
 import Image from "next/image";
+
 
 //INTERNAL IMPORT
 import Style from "./UploadNFT.module.css";
@@ -17,7 +20,30 @@ const UploadNFT = () => {
   const [itemName, setItemName] = useState("");
   const [description, setDescription] = useState("");
   const [royalties, setRoyalties] = useState("");
+  const [file, setFile] = useState(null);
 
+  const handleUpload = async () => {
+    // Ensure a file is selected
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+    try {
+      // Create a storage reference
+      const storageRef = ref(storage, 'nft-images//' + file.name);
+
+      // Upload file to Firebase storage
+      await uploadBytes(storageRef, file);
+
+      // Get the download URL of the uploaded file
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Now you can use the downloadURL for minting or any other purpose
+      console.log('File uploaded successfully! Download URL:', downloadURL);
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
+    }
+};
   return (
     <div className={Style.upload}>
       <DropZone
@@ -28,6 +54,7 @@ const UploadNFT = () => {
         description={description}
         royalties={royalties}
         image={images.upload}
+        onFileChange={(selectedFile) => setFile(selectedFile)}
       />
 
       <div className={Style.upload_box}>
@@ -75,7 +102,7 @@ const UploadNFT = () => {
         <div className={Style.upload_box_btn}>
           <Button
             btnName="Upload"
-            handleClick={() => {}}
+            handleClick={handleUpload}
             classStyle={Style.upload_box_btn_style}
           />
           <Button

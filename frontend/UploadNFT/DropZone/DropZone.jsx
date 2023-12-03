@@ -15,11 +15,14 @@ const DropZone = ({
   royalties,
   category,
   image,
+  onFileChange,
 }) => {
   const [fileUrl, setFileUrl] = useState(null);
 
   const onDrop = useCallback(async (acceptedFile) => {
     setFileUrl(acceptedFile[0]);
+    // Pass the selected file back to the parent component
+    onFileChange && onFileChange(acceptedFile[0]);
   });
 
   const { getRootProps, getInputProps } = useDropzone({
