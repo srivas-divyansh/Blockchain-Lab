@@ -39,7 +39,7 @@ contract MyNFT is ERC721URIStorage , Ownable {
     }
 
     // Function to get the royalties percentage for a specific NFT.
-    function getRoyaltiesPercentage(uint256 tokenId) public view returns (uint256) {
-        return _nfts[tokenId].royaltiesPercentage;
-    }
+//     function getRoyaltiesPercentage(uint256 tokenId) public view returns (uint256) {
+//         return _nfts[tokenId].royaltiesPercentage;
+//     }
 }
