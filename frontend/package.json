@@ -11,12 +11,11 @@
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.7",
     "axios": "^1.6.1",
-<<<<<<< HEAD
     "firebase": "^10.7.0",
     "next": "^13.5.6",
-=======
-    "next": "^14.0.3",
->>>>>>> 79bb2eca8821eb96a3e802a32d0f2cd7cc34337b
+
+    "firebase": "^10.7.0",
+    "next": "^13.5.6",
     "nft.storage": "^7.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
