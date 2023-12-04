@@ -85,11 +85,16 @@ const NavBar = () => {
             <div className={Style.navbar_container}>
                 <div className={Style.navbar_container_left}>
                     <div className={Style.logo}>
+                        {/*wrap the logo with link*/}
+                        <Link href="/">
+                    
                         <Image src={images.logo}
                          alt="NFTify"
                          width={120}
                          height={120}
                           />
+                        
+                        </Link>
                     </div>
                 <div className={Style.navbar_container_left_box_input}>
                     <div className={Style.navbar_container_left_box_input_box}>
