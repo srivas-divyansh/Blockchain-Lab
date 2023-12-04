@@ -22,6 +22,21 @@ const UploadNFT = () => {
   const [description, setDescription] = useState("");
   const [royalties, setRoyalties] = useState("");
   const [file, setFile] = useState(null);
+  const [previewURL, setPreviewURL] = useState(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+  const handleFileChange = (selectedFile) => {
+    setFile(selectedFile);
+
+    // Generate a preview URL for image files
+    if (selectedFile.type.startsWith('image/')) {
+      const previewURL = URL.createObjectURL(selectedFile);
+      setPreviewURL(previewURL);
+    } else {
+      // Clear the preview if the file is not an image
+      setPreviewURL(null);
+    }
+  };
 
   const handleUpload = async () => {
     const url = await uploadFileAndGetURL(file);
@@ -31,6 +46,15 @@ const UploadNFT = () => {
       console.log('URL returned from uploadFileAndGetURL:', url);
     }
   };
+
+  const handlePreview = () => {
+    setIsPreviewModalOpen(true);
+  };
+
+  const closePreviewModal = () => {
+    setIsPreviewModalOpen(false);
+  };
+
   return (
     <div className={Style.upload}>
       <DropZone
@@ -41,7 +65,7 @@ const UploadNFT = () => {
         description={description}
         royalties={royalties}
         image={images.upload}
-        onFileChange={(selectedFile) => setFile(selectedFile)}
+        onFileChange={handleFileChange}
       />
 
       <div className={Style.upload_box}>
@@ -94,11 +118,28 @@ const UploadNFT = () => {
           />
           <Button
             btnName="Preview"
-            handleClick={() => {}}
+            handleClick={handlePreview}
             classStyle={Style.upload_box_btn_style}
           />
         </div>
       </div>
+      {/* Preview Modal */}
+      {isPreviewModalOpen && (
+        <div className={Style.previewModal}>
+          <div className={Style.previewModalContent}>
+            <span className={Style.closePreviewModal} onClick={closePreviewModal}>
+              &times;
+            </span>
+            {previewURL && (
+              <img
+                src={previewURL}
+                alt="File Preview"
+                style={{ maxWidth: '100%', maxHeight: '100%' }}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
