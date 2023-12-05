@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import * as linkingDetails  from '@/utils/linkingDetails';
 import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
@@ -7,7 +8,8 @@ import { AiTwotonePropertySafety } from "react-icons/ai";
 import { TiTick } from "react-icons/ti";
 import Image from "next/image";
 import uploadFileAndGetURL from '../utils/uploadFile';
-
+import ethers from "ethers";
+import abi from  "../components/contracts/MyNFT.json";
 
 //INTERNAL IMPORT
 import Style from "./UploadNFT.module.css";
@@ -15,6 +17,7 @@ import formStyle from "../AccountPage/Form/Form.module.css";
 import images from "../img";
 import { Button } from "../components/componentindex.js";
 import { DropZone } from "../UploadNFT/uploadNFTindex.js";
+import { mintNFT } from '@/pages/mintNFT';
 
 const UploadNFT = () => {
   const [active, setActive] = useState(0);
@@ -25,7 +28,7 @@ const UploadNFT = () => {
   const [previewURL, setPreviewURL] = useState(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
-  const handleFileChange = (selectedFile) => {
+  const handleFileChange = async (selectedFile) => {
     setFile(selectedFile);
 
     // Generate a preview URL for image files
@@ -38,7 +41,7 @@ const UploadNFT = () => {
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload =  async() => {
     const url = await uploadFileAndGetURL(file);
 
     if (url) {
@@ -55,6 +58,61 @@ const UploadNFT = () => {
     setIsPreviewModalOpen(false);
   };
 
+  const [state, setState] = useState({
+    provider: null,
+    signer: null,
+    contract: null
+  });
+  const [account, setAccount] = useState("None");
+  useEffect(() => {
+  const linking = async () => {
+    const contractAddress = "0x5BD3D0c828a05451B0C2306737324bD394BA5174";
+          const contractABI = abi.abi;
+          try {
+            const {ethereum} = window;
+          if (ethereum){
+              const [account] = await ethereum.request({
+              method:"eth_requestAccounts",
+              });
+              
+              const provider = new ethers.providers.Web3Provider(window.ethereum);
+              const signer = provider.getSigner();
+              const contract = new ethers.Contract(contractAddress, contractABI, signer);
+          setAccount(account);
+          setState({provider, signer, contract});
+          console.log(state);
+          console.log(account);
+          } else {
+              alert("Please install Metamask");
+          }
+        } catch(error){
+          console.log(error);
+        }
+        
+      };
+      linking();
+    }, []);
+      // linking();
+      
+      
+      
+      // useEffect(() => {
+        async function NFT() {
+            // linking();
+          // const {contract} = state;
+            const recipient = account;
+            const tokenURI = handleUpload();
+            const royal = document.querySelector("#Royalties").value;
+            console.log(account);
+            console.log(state);
+            const itemId = await state.contract.mintNFT(recipient, tokenURI, royal);
+            setItemid(itemId);
+            console.log(itemId);
+          }
+          // }, []);
+          
+
+  // mintNFT(linkingDetails().currentState, linkingDetails.currentAccount);
   return (
     <div className={Style.upload}>
       <DropZone
@@ -104,6 +162,7 @@ const UploadNFT = () => {
               </div>
               <input
                 type="text"
+                id = "Royalties"
                 placeholder="20%"
                 onChange={(e) => setRoyalties(e.target.value)}
               />
@@ -113,7 +172,7 @@ const UploadNFT = () => {
         <div className={Style.upload_box_btn}>
           <Button
             btnName="Upload"
-            handleClick={handleUpload}
+            handleClick={() => {handleUpload(); NFT();}}
             classStyle={Style.upload_box_btn_style}
           />
           <Button
