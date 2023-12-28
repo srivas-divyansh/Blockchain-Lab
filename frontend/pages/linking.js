@@ -33,11 +33,13 @@ const ConnectWalletPage = () => {
         console.log(error);
       }
     };
-     const handleConnectWallet = () => {
-       linking();
-     };
+     linking();
       
   }, []);
+      
+      const handleConnectWallet = () => {
+        linking();
+      };
       console.log(state);
 
   return (
