@@ -42,12 +42,15 @@ const UploadNFT = () => {
   };
 
   const handleUpload =  async() => {
+    console.log('Entering handleUpload');
     const url = await uploadFileAndGetURL(file);
 
     if (url) {
       // Now you can use the 'url' variable as needed
       console.log('URL returned from uploadFileAndGetURL:', url);
+      return url;
     }
+    return null;
   };
 
   const handlePreview = () => {
@@ -69,7 +72,7 @@ const UploadNFT = () => {
     const contractAddress = "0x5BD3D0c828a05451B0C2306737324bD394BA5174";
           const contractABI = abi.abi;
           try {
-            const {ethereum} = window;
+            const {ethereum} = window ?? {};
           if (ethereum){
               const [account] = await ethereum.request({
               method:"eth_requestAccounts",
@@ -97,17 +100,25 @@ const UploadNFT = () => {
       
       
       // useEffect(() => {
-        async function NFT() {
+        //async function NFT() {
             // linking();
           // const {contract} = state;
+          const handleNFT = async () => {
+           
+            const tokenURI = await handleUpload();
+            if(tokenURI){
             const recipient = account;
-            const tokenURI = handleUpload();
             const royal = document.querySelector("#Royalties").value;
             console.log(account);
             console.log(state);
             const itemId = await state.contract.mintNFT(recipient, tokenURI, royal);
             setItemid(itemId);
-            console.log(itemId);
+            console.log('Minted NFT ID:', itemId);
+            alert('NFT minting successful!');
+            }else{
+              console.log("URL not found");
+            
+            }
           }
           // }, []);
           
@@ -172,7 +183,7 @@ const UploadNFT = () => {
         <div className={Style.upload_box_btn}>
           <Button
             btnName="Upload"
-            handleClick={() => {handleUpload(); NFT();}}
+            handleClick={() => {handleNFT}}
             classStyle={Style.upload_box_btn_style}
           />
           <Button
